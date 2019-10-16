@@ -73,9 +73,12 @@ public class EglHelper {
 		} else {
 			mEglContext = mEgl.eglCreateContext(mEglDisplay,configs[0],EGL10.EGL_NO_CONTEXT,attrib_list);
 		}
-
+		
 		//7、创建渲染的Surface
-		mEglSurface = mEgl.eglCreateWindowSurface(mEglDisplay,configs[0],surface,attrib_list);
+//        	 mEglSurface = mEgl.eglCreateWindowSurface(mEglDisplay,eglConfigs[0],surface,attrib_list );//绘制无效,会一直打印libEGL: eglSwapBuffersWithDamageKHR:1370 error 300d (EGL_BAD_SURFACE)
+        	int[] surfaceAttr = {EGL10.EGL_NONE};
+        	mEglSurface = mEgl.eglCreateWindowSurface(mEglDisplay,eglConfigs[0],surface,surfaceAttr );//解决绘制无效,一直打印libEGL: eglSwapBuffersWithDamageKHR:1370 error 300d (EGL_BAD_SURFACE)
+
 
 		//8、绑定EglContext和Surface到显示设备中
 		if (!mEgl.eglMakeCurrent(mEglDisplay,mEglSurface,mEglSurface,mEglContext)){
